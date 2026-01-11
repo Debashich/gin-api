@@ -1,53 +1,78 @@
 # go-albums-api
 
-A minimal REST API for managing music albums, built with Go and Gin.
+A minimal REST API for managing music albums, built with Go and the Gin framework.[web:1][web:11]
 
-## Project Structure
+> Repo: https://github.com/Debashich/gin-api
 
-```
-go-albums-api/
+---
+
+## Features
+
+- JSON-based REST API for albums (list, retrieve by ID, create).[web:1]
+- In-memory data store with a simple `Album` model.
+- Layered structure: HTTP handlers, model, and store separated for clarity.[web:1][web:14]
+- Ready to extend with a real database or authentication.
+
+---
+
+## Project structure
+
+```txt
+gin-api/
   cmd/
     server/
-      main.go        // entrypoint: starts Gin and registers routes
+      main.go        # Entrypoint: starts Gin and registers routes
   internal/
     albums/
-      handler.go     // Gin handlers (getAlbums, getAlbumByID, postAlbums)
-      model.go       // album struct
-      store.go       // in-memory data (later DB)
+      handler.go     # Gin handlers (GetAll, GetByID, Add)
+      model.go       # Album struct definition
+      store.go       # In-memory data store (seed albums)
   go.mod
+  go.sum
   README.md
+
 ```
 
-## Usage
+Getting started
+Prerequisites
+Go 1.21 or later installed.[web:71]
 
-1. Clone the repo
-2. Run `go mod tidy`
-3. Start the server:
-   ```sh
-   go run ./cmd/server
-   ```
-4. API Endpoints:
-   - `GET /albums` — list all albums
-   - `GET /albums/:id` — get album by ID
-   - `POST /albums` — add a new album
+Git installed.
 
-## cURL examples
-
-List all albums:
-
-```sh
-curl -X GET http://localhost:8080/albums
+Setup
 ```
+git clone https://github.com/Debashich/gin-api.git
+cd gin-api
 
-Get a single album by ID:
-
-```sh
-curl -X GET http://localhost:8080/albums/1
+go mod tidy
 ```
+Run the server
+From the project root:
 
-Create a new album:
+```
+go run ./cmd/server
+```
+By default the API listens on http://localhost:8080.[web:1]
 
-```sh
+API
+Endpoints
+``GET /albums`` – return all albums.
+
+``GET /albums/:id`` – return a single album by ID.
+
+``POST /albums`` – create a new album.[web:1]
+
+Example requests (cURL)
+List all albums
+text
+curl http://localhost:8080/albums
+Get a single album by ID
+text
+curl http://localhost:8080/albums/1
+If the album does not exist, the API returns a 404 with a JSON error.
+
+Create a new album
+```
 curl -X POST http://localhost:8080/albums \
   -H "Content-Type: application/json" \
   -d '{
@@ -57,7 +82,8 @@ curl -X POST http://localhost:8080/albums \
     "price": 25.50
   }'
 ```
+Then verify it was added:
 
-## License
-
-MIT
+```
+curl http://localhost:8080/albums
+```
